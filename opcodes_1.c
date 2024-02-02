@@ -1,10 +1,14 @@
 #include "monty.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <ctype.h>
 
 /* Function to push an element onto the stack */
 void push(stack_t **stack, unsigned int line_number)
 {
     char *argument;
     int value;
+    stack_t *new_node = malloc(sizeof(stack_t));
 
     /* Check if there is an argument */
     if (!stack || !line_number)
@@ -25,7 +29,7 @@ void push(stack_t **stack, unsigned int line_number)
     value = atoi(argument);
 
     /* Create a new node */
-    stack_t *new_node = malloc(sizeof(stack_t));
+
     if (!new_node)
     {
         fprintf(stderr, "Error: malloc failed\n");

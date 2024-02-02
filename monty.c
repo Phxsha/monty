@@ -1,4 +1,7 @@
+#define _POSIX_C_SOURCE 200809L
+
 #include "monty.h"
+#include <string.h>
 
 int main(int argc, char *argv[])
 {
@@ -8,6 +11,7 @@ int main(int argc, char *argv[])
     ssize_t read;
     unsigned int line_number = 0;
     stack_t *stack = NULL;
+    instruction_t instruction = {"push", push};
 
     /* Check for correct number of arguments */
     if (argc != 2)
@@ -30,7 +34,6 @@ int main(int argc, char *argv[])
         line_number++;
         /* Call function based on opcode */
         strtok(line, "\n");
-        instruction_t instruction = {"push", push};
 
         if (strcmp(line, "pall") == 0)
             instruction.f(&stack, line_number);
