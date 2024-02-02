@@ -11,7 +11,8 @@ int main(int argc, char *argv[])
     ssize_t read;
     unsigned int line_number = 0;
     stack_t *stack = NULL;
-    instruction_t instruction = {"push", push};
+    char *opcode;
+    instruction_t instruction;
 
     /* Check for correct number of arguments */
     if (argc != 2)
@@ -33,17 +34,27 @@ int main(int argc, char *argv[])
     {
         line_number++;
         /* Call function based on opcode */
-        strtok(line, "\n");
+	opcode = strtok(line, " \t\n");
 
-        if (strcmp(line, "pall") == 0)
-            instruction.f(&stack, line_number);
-        else if (strcmp(line, "push") == 0)
-            push(&stack, line_number);
-        else
+        if (opcode)
         {
-            fprintf(stderr, "L%d: unknown instruction %s\n", line_number, line);
-            exit(EXIT_FAILURE);
-        }
+	    instruction.opcode = opcode;
+	    instruction.f = NULL;
+            if (strcmp(opcode, "pall") == 0)
+                instruction.f = pall;
+            else if (strcmp(opcode, "push") == 0)
+                instruction.f = push;
+            else
+            {
+                fprintf(stderr, "L%d: unknown instruction %s\n", line_number, opcode);
+                exit(EXIT_FAILURE);
+            }
+	    
+	    if (instruction.f)
+	    {
+	        instruction.f(&stack, line_number);
+	    }
+	}
     }
 
     /* Clean up and close the file */
